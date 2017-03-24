@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Tic_Tac_Toe2</string>
+    <string name="quit_button">QUIT</string>
+    <string name="play_again_button">PLAY AGAIN</string>
+    <string name="cross_won">Cross won!</string>
+    <string name="circle_won">Circle won!</string>
+    <string name="draw">Draw</string>
 </resources>
