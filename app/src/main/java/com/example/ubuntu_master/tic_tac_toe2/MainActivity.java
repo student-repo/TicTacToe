@@ -1,12 +1,22 @@
 package com.example.ubuntu_master.tic_tac_toe2;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,19 +41,132 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
+
+
+
+
         initBoard();
         createBoard();
+
+
 
         AutoResizeTextView aa = (AutoResizeTextView)findViewById(R.id.portrait_mode_result);
         aa.setText(gamesWonO + " : " + gamesWonX);
         String s = String.valueOf(getResources().getConfiguration().orientation);
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+
+        TypedValue tv1 = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv1, true)){
+            int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv1.data,getResources().getDisplayMetrics());
+            System.out.println("#####" + actionBarHeight);
+        }
+
 //        1 - portrait
 //        2 - landscape
 
+        Rect rectangle = new Rect();
+        Window window = getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight = rectangle.top;
+        int contentViewTop =
+                window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        int titleBarHeight= contentViewTop - statusBarHeight;
+
+//        System.out.println("*** Elenasys :: " +  "StatusBar Height= " + statusBarHeight + " , TitleBar Height = " + titleBarHeight);
+
+        final LinearLayout tv = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
+        ViewTreeObserver vto = tv.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                LayerDrawable ld = (LayerDrawable)tv.getBackground();
+//                Toast.makeText(this, String.valueOf(tv.getHeight()), Toast.LENGTH_SHORT).show();
+                System.out.println(tv.getHeight());
+                RelativeLayout r = (RelativeLayout)findViewById(R.id.activity_main);
+                System.out.println(tv.getBottom());
+
+                tv.getPaddingEnd();
+
+
+
+                Rect rectangle = new Rect();
+                Window window = getWindow();
+                window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+                int statusBarHeight = rectangle.top;
+                int contentViewTop =
+                        window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+                int titleBarHeight= contentViewTop - statusBarHeight;
+
+                System.out.println("*** Elenasys :: " +  "StatusBar Height= " + statusBarHeight + " , TitleBar Height = " + titleBarHeight + " , TitleBar Bottom = ");
+
+                System.out.println("^^^^^ " + getStatusBarHeight1());
+
+                LinearLayout llll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
+
+                System.out.println("**************** " + llll.getHeight());
+
+
+
+//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
+//                ViewTreeObserver obs = tv.getViewTreeObserver();
+
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    obs.removeOnGlobalLayoutListener(this);
+//                } else {
+//                    obs.removeGlobalOnLayoutListener(this);
+//                }
+            }
+
+        });
+
 
     }
+
+    public int getStatusBarHeight1() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+                RelativeLayout r = (RelativeLayout)findViewById(R.id.activity_main);
+        LinearLayout l = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
+//        r.setVisibility(View.GONE);
+//        l.setVisibility(View.GONE);
+        Toast.makeText(this, String.valueOf(l.getHeight()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(r.getHeight()), Toast.LENGTH_SHORT).show();
+
+
+//        View decorView = getWindow().getDecorView();
+//// Hide the status bar.
+//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+//        decorView.setSystemUiVisibility(uiOptions);
+//// Remember that you should never show the action bar if the
+//// status bar is hidden, so hide that too if necessary.
+//        ActionBar actionBar = getActionBar();
+//        actionBar.hide();
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -106,10 +229,22 @@ public class MainActivity extends AppCompatActivity {
 //        Toast.makeText(this, String.valueOf(l.getHeight()), Toast.LENGTH_SHORT).show();
 //        Toast.makeText(this, String.valueOf(r.getHeight()), Toast.LENGTH_SHORT).show();
 
-        param.height = (int)Math.floor(fieldSize.x / boardSize);
-        param.width = (int)Math.floor(fieldSize.x / boardSize);
-        param.columnSpec = GridLayout.spec(columnSpec);
-        param.rowSpec = GridLayout.spec(rowSpec);
+//        LinearLayout lll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
+//        System.out.println( " !@!@!@!@! "  + lll.getHeight());
+
+
+        param.height = 1;
+        param.width = 1;
+//        param.height = (int)Math.floor((fieldSize.y - 72 - 10) / boardSize);
+//        param.width = (int)Math.floor((fieldSize.y - 72 - 10) / boardSize);
+//        param.height = (int)Math.floor((fieldSize.x) / boardSize);
+//        param.width = (int)Math.floor((fieldSize.x) / boardSize);
+
+
+//        param.columnSpec = GridLayout.spec(columnSpec);
+//        param.rowSpec = GridLayout.spec(rowSpec);
+        param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+        param.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
         return param;
     }
 
