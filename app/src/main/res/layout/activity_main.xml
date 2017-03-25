@@ -9,60 +9,68 @@
 
 
     <LinearLayout
-        android:id="@+id/portrait_mode_result_info"
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/portrait_mode_result_info"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/portrait_mode_circle_sign"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/circle3" />
+
+            <com.example.ubuntu_master.tic_tac_toe2.AutoResizeTextView
+                android:id="@+id/portrait_mode_result"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0 : 0"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="200dp"
+                android:textColor="#FFFFFF"
+                android:textAlignment="center"
+                android:gravity="center"
+                />
 
 
-        >
+            <ImageView
+                android:id="@+id/portrait_mode_cross_sign"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cross3"
+                />
 
-        <ImageView
-            android:id="@+id/portrait_mode_circle_sign"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/circle3" />
-
-        <com.example.ubuntu_master.tic_tac_toe2.AutoResizeTextView
-            android:id="@+id/portrait_mode_result"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-medium"
-            android:textSize="200dp"
-            android:textColor="#FFFFFF"
-            android:textAlignment="center"
-            android:gravity="center"
-            />
+        </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/portrait_mode_cross_sign"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/cross3"
-            />
+
+            <com.example.ubuntu_master.tic_tac_toe2.FooGrid
+                android:id="@+id/board_grid"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000059"
+                />
 
     </LinearLayout>
 
-    <com.example.ubuntu_master.tic_tac_toe2.SquareRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/portrait_mode_result_info"
-        android:layout_margin="20dp">
 
-        <GridLayout
-            android:id="@+id/board_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#000059"
-            >
 
-        </GridLayout>
-    </com.example.ubuntu_master.tic_tac_toe2.SquareRelativeLayout>
+/
+    <!--android:layout_centerHorizontal="true"-->
 
 
 
@@ -117,3 +125,80 @@
     <!--android:gravity="center"-->
     <!--android:textSize="200dp"-->
     <!--android:layout_below="@+id/board_grid"-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<com.example.ubuntu_master.tic_tac_toe2.SquareRelativeLayout-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:layout_below="@+id/portrait_mode_result_info"-->
+<!--android:layout_centerHorizontal="true"-->
+    <!--&gt;-->
+<!--<GridLayout-->
+    <!--android:id="@+id/board_grid"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#000059"-->
+
+    <!--/>-->
+<!--</com.example.ubuntu_master.tic_tac_toe2.SquareRelativeLayout>-->
+
+
+
+
+
+<!--<LinearLayout-->
+<!--android:id="@+id/portrait_mode_result_info"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="50dp"-->
+<!--android:orientation="horizontal"-->
+<!--android:layout_margin="10dp"-->
+<!--android:visibility="gone"-->
+
+
+
+    <!--&gt;-->
+
+<!--<ImageView-->
+    <!--android:id="@+id/portrait_mode_circle_sign"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/circle3" />-->
+
+<!--<com.example.ubuntu_master.tic_tac_toe2.AutoResizeTextView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="0 : 0"-->
+    <!--android:fontFamily="sans-serif-medium"-->
+    <!--android:textSize="200dp"-->
+    <!--android:textColor="#FFFFFF"-->
+    <!--android:textAlignment="center"-->
+    <!--android:gravity="center"-->
+    <!--/>-->
+
+
+<!--<ImageView-->
+    <!--android:id="@+id/portrait_mode_cross_sign"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/cross3"-->
+    <!--/>-->
+
+<!--</LinearLayout>-->

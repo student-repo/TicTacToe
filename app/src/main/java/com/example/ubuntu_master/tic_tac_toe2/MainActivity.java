@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,81 +60,38 @@ public class MainActivity extends AppCompatActivity {
         String s = String.valueOf(getResources().getConfiguration().orientation);
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 
-        TypedValue tv1 = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv1, true)){
-            int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv1.data,getResources().getDisplayMetrics());
-            System.out.println("#####" + actionBarHeight);
-        }
 
+        FooGrid gridLayout = (FooGrid)findViewById(R.id.board_grid);
+        LinearLayout ll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
+        LinearLayout lll = (LinearLayout)findViewById(R.id.main_layout);
+        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) ll.getLayoutParams();
+
+        if(getResources().getConfiguration().orientation == 1){
+            gridLayout.setLandscapeMode(false);
+            lll.setOrientation(LinearLayout.VERTICAL);
+//            gridLayout.setLayoutParams(param);
+            param.weight = 0;
+            ll.setLayoutParams(param);
+        }
+        else{
+            gridLayout.setLandscapeMode(true);
+            lll.setOrientation(LinearLayout.HORIZONTAL);
+//            ll.setWeightSum(1);
+            param.weight = 1;
+            ll.setLayoutParams(param);
+
+        }
 //        1 - portrait
 //        2 - landscape
 
-        Rect rectangle = new Rect();
-        Window window = getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-        int statusBarHeight = rectangle.top;
-        int contentViewTop =
-                window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-        int titleBarHeight= contentViewTop - statusBarHeight;
-
-//        System.out.println("*** Elenasys :: " +  "StatusBar Height= " + statusBarHeight + " , TitleBar Height = " + titleBarHeight);
-
-        final LinearLayout tv = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-        ViewTreeObserver vto = tv.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                LayerDrawable ld = (LayerDrawable)tv.getBackground();
-//                Toast.makeText(this, String.valueOf(tv.getHeight()), Toast.LENGTH_SHORT).show();
-                System.out.println(tv.getHeight());
-                RelativeLayout r = (RelativeLayout)findViewById(R.id.activity_main);
-                System.out.println(tv.getBottom());
-
-                tv.getPaddingEnd();
 
 
 
-                Rect rectangle = new Rect();
-                Window window = getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-                int statusBarHeight = rectangle.top;
-                int contentViewTop =
-                        window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-                int titleBarHeight= contentViewTop - statusBarHeight;
-
-                System.out.println("*** Elenasys :: " +  "StatusBar Height= " + statusBarHeight + " , TitleBar Height = " + titleBarHeight + " , TitleBar Bottom = ");
-
-                System.out.println("^^^^^ " + getStatusBarHeight1());
-
-                LinearLayout llll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-
-                System.out.println("**************** " + llll.getHeight());
 
 
 
-//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-//                ViewTreeObserver obs = tv.getViewTreeObserver();
-
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                    obs.removeOnGlobalLayoutListener(this);
-//                } else {
-//                    obs.removeGlobalOnLayoutListener(this);
-//                }
-            }
-
-        });
 
 
-    }
-
-    public int getStatusBarHeight1() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     @Override
@@ -141,52 +99,45 @@ public class MainActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
                 RelativeLayout r = (RelativeLayout)findViewById(R.id.activity_main);
         LinearLayout l = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-//        r.setVisibility(View.GONE);
-//        l.setVisibility(View.GONE);
         Toast.makeText(this, String.valueOf(l.getHeight()), Toast.LENGTH_SHORT).show();
         Toast.makeText(this, String.valueOf(r.getHeight()), Toast.LENGTH_SHORT).show();
-
-
-//        View decorView = getWindow().getDecorView();
-//// Hide the status bar.
-//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-//        decorView.setSystemUiVisibility(uiOptions);
-//// Remember that you should never show the action bar if the
-//// status bar is hidden, so hide that too if necessary.
-//        ActionBar actionBar = getActionBar();
-//        actionBar.hide();
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
 
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-//        LinearLayout l = (LinearLayout)findViewById(R.id.landscape_mode_result_info);
-//        LinearLayout ll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-        // Checks the orientation of the screen
+        FooGrid gridLayout = (FooGrid)findViewById(R.id.board_grid);
+        LinearLayout ll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
+        LinearLayout lll = (LinearLayout)findViewById(R.id.main_layout);
+        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) ll.getLayoutParams();
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 //            l.setVisibility(View.VISIBLE);
             Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+            gridLayout.setLandscapeMode(true);
+            lll.setOrientation(LinearLayout.HORIZONTAL);
+//            ll.setWeightSum(1);
+            param.weight = 1;
+            ll.setLayoutParams(param);
+            gridLayout.setLandscapeMode(true);
 //            ll.setVisibility(View.GONE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+            gridLayout.setLandscapeMode(false);
+            lll.setOrientation(LinearLayout.VERTICAL);
+//            gridLayout.setLayoutParams(param);
+            param.weight = 0;
+            ll.setLayoutParams(param);
 //            l.setVisibility(View.GONE);
 //            ll.setVisibility(View.VISIBLE);
         }
     }
 
     private void createBoard(){
-        GridLayout gridLayout = (GridLayout)findViewById(R.id.board_grid);
+        FooGrid gridLayout = (FooGrid)findViewById(R.id.board_grid);
         gridLayout.removeAllViews();
+
 
         gridLayout.setColumnCount(boardSize);
         gridLayout.setRowCount(boardSize);
@@ -202,15 +153,11 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onClick(View v) {
-//                            ImageView img = (ImageView)findViewById(v.getId());
-//                            System.out.println(getFieldCoordinate(Integer.parseInt(v.getTag().toString())));
                             handleSingleField(v);
                         }
                     }
             );
-//            System.out.println(r * boardSize + c);
-//            Toast.makeText(this, "Draw " + (r * boardSize + c), Toast.LENGTH_SHORT).show();
-            oImageView.setImageResource(R.drawable.empty4);
+            oImageView.setImageResource(R.drawable.empty6);
             oImageView.setId(r * boardSize + c);
             oImageView.setLayoutParams (getFieldParam(c, r));
             gridLayout.addView(oImageView);
@@ -220,29 +167,8 @@ public class MainActivity extends AppCompatActivity {
         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
         Point fieldSize = getScreenSize();// fieldSize.x = screenWidth, fieldSize.y = screenHeight
 
-
-
-//        RelativeLayout r = (RelativeLayout)findViewById(R.id.activity_main);
-//        LinearLayout l = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-//        r.setVisibility(View.GONE);
-//        l.setVisibility(View.GONE);
-//        Toast.makeText(this, String.valueOf(l.getHeight()), Toast.LENGTH_SHORT).show();
-//        Toast.makeText(this, String.valueOf(r.getHeight()), Toast.LENGTH_SHORT).show();
-
-//        LinearLayout lll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-//        System.out.println( " !@!@!@!@! "  + lll.getHeight());
-
-
         param.height = 1;
         param.width = 1;
-//        param.height = (int)Math.floor((fieldSize.y - 72 - 10) / boardSize);
-//        param.width = (int)Math.floor((fieldSize.y - 72 - 10) / boardSize);
-//        param.height = (int)Math.floor((fieldSize.x) / boardSize);
-//        param.width = (int)Math.floor((fieldSize.x) / boardSize);
-
-
-//        param.columnSpec = GridLayout.spec(columnSpec);
-//        param.rowSpec = GridLayout.spec(rowSpec);
         param.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
         param.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
         return param;
@@ -257,10 +183,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleSingleField(View view){
         ImageView img = (ImageView)findViewById(view.getId());
-//        System.out.println("ala ma  ktoa");
         int x = getFieldCoordinate(Integer.parseInt(view.getTag().toString())).x;
         int y = getFieldCoordinate(Integer.parseInt(view.getTag().toString())).y;
-//        System.out.println(x + " " + y + " field id = " + view.getId());
         if(validMove(x, y)){
             if(whiteMove){
                 move(x, y, State.O);
@@ -369,12 +293,14 @@ public class MainActivity extends AppCompatActivity {
     private void handleWinner(State s){
         GridLayout l = (GridLayout) findViewById(R.id.board_grid);
         LinearLayout ll = (LinearLayout)findViewById(R.id.quit_play_again_layout);
+        LinearLayout lla = (LinearLayout)findViewById(R.id.main_layout);
 //        TextView tv = (TextView)findViewById(R.id.landscape_mode_result);
         TextView tv2 = (TextView)findViewById(R.id.portrait_mode_result);
         TextView lll = (TextView) findViewById(R.id.win_info);
         lll.setVisibility(View.VISIBLE);
         l.setVisibility(View.GONE);
         ll.setVisibility(View.VISIBLE);
+        lla.setVisibility(View.GONE);
         if(s == State.O){
             gamesWonO++;
             Toast.makeText(this, s + "  won ! ! !", Toast.LENGTH_SHORT).show();
@@ -401,6 +327,8 @@ public class MainActivity extends AppCompatActivity {
         GridLayout l = (GridLayout)findViewById(R.id.board_grid);
         LinearLayout ll = (LinearLayout)findViewById(R.id.quit_play_again_layout);
         TextView lll = (TextView) findViewById(R.id.win_info);
+        LinearLayout lla = (LinearLayout)findViewById(R.id.main_layout);
+        lla.setVisibility(View.VISIBLE);
         lll.setVisibility(View.GONE);
         initBoard();
         whiteMove = true;
