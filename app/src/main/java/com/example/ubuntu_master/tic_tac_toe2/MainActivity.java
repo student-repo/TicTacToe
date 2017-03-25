@@ -1,37 +1,25 @@
 package com.example.ubuntu_master.tic_tac_toe2;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends AppCompatActivity {
 
     private int boardSize = 4;
-    private boolean whiteMove = true;
+    private boolean circleMove = true;
     private int moveCount = 0;
     private enum State{Blank, X, O};
     private State[][] board = new State[boardSize][boardSize];
@@ -43,99 +31,62 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-
-
-
-
 
         initBoard();
         createBoard();
+        initResultInfo();
+        setParamsToCurrentMode();
 
+    }
 
-
-        AutoResizeTextView aa = (AutoResizeTextView)findViewById(R.id.portrait_mode_result);
-        aa.setText(gamesWonO + " : " + gamesWonX);
-        String s = String.valueOf(getResources().getConfiguration().orientation);
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-
-
-        FooGrid gridLayout = (FooGrid)findViewById(R.id.board_grid);
-        LinearLayout ll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-        LinearLayout lll = (LinearLayout)findViewById(R.id.main_layout);
-        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) ll.getLayoutParams();
-
+    private void setParamsToCurrentMode() {
         if(getResources().getConfiguration().orientation == 1){
-            gridLayout.setLandscapeMode(false);
-            lll.setOrientation(LinearLayout.VERTICAL);
-//            gridLayout.setLayoutParams(param);
-            param.weight = 0;
-            ll.setLayoutParams(param);
+            setPortraitModeParams();
         }
         else{
-            gridLayout.setLandscapeMode(true);
-            lll.setOrientation(LinearLayout.HORIZONTAL);
-//            ll.setWeightSum(1);
-            param.weight = 1;
-            ll.setLayoutParams(param);
-
+            setLandscapeModeParams();
         }
 //        1 - portrait
 //        2 - landscape
-
-
-
-
-
-
-
-
-
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-                RelativeLayout r = (RelativeLayout)findViewById(R.id.activity_main);
-        LinearLayout l = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-        Toast.makeText(this, String.valueOf(l.getHeight()), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, String.valueOf(r.getHeight()), Toast.LENGTH_SHORT).show();
+    private void setLandscapeModeParams() {
+        SquareGridLayout gridLayout = (SquareGridLayout)findViewById(R.id.board_grid);
+        LinearLayout rill = (LinearLayout)findViewById(R.id.result_info_linear_layout);
+        LinearLayout mll = (LinearLayout)findViewById(R.id.main_linear_layout);
+        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) rill.getLayoutParams();
+
+        gridLayout.setLandscapeMode(true);
+        mll.setOrientation(LinearLayout.HORIZONTAL);
+        param.weight = 1;
+        rill.setLayoutParams(param);
     }
 
+    private void setPortraitModeParams() {
+        SquareGridLayout gridLayout = (SquareGridLayout)findViewById(R.id.board_grid);
+        LinearLayout rill = (LinearLayout)findViewById(R.id.result_info_linear_layout);
+        LinearLayout mll = (LinearLayout)findViewById(R.id.main_linear_layout);
+        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) rill.getLayoutParams();
 
+        gridLayout.setLandscapeMode(false);
+        mll.setOrientation(LinearLayout.VERTICAL);
+        param.weight = 0;
+        rill.setLayoutParams(param);
+    }
 
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        FooGrid gridLayout = (FooGrid)findViewById(R.id.board_grid);
-        LinearLayout ll = (LinearLayout)findViewById(R.id.portrait_mode_result_info);
-        LinearLayout lll = (LinearLayout)findViewById(R.id.main_layout);
-        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) ll.getLayoutParams();
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            l.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-            gridLayout.setLandscapeMode(true);
-            lll.setOrientation(LinearLayout.HORIZONTAL);
-//            ll.setWeightSum(1);
-            param.weight = 1;
-            ll.setLayoutParams(param);
-            gridLayout.setLandscapeMode(true);
-//            ll.setVisibility(View.GONE);
+            setLandscapeModeParams();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-            gridLayout.setLandscapeMode(false);
-            lll.setOrientation(LinearLayout.VERTICAL);
-//            gridLayout.setLayoutParams(param);
-            param.weight = 0;
-            ll.setLayoutParams(param);
-//            l.setVisibility(View.GONE);
-//            ll.setVisibility(View.VISIBLE);
+            setParamsToCurrentMode();
         }
     }
 
     private void createBoard(){
-        FooGrid gridLayout = (FooGrid)findViewById(R.id.board_grid);
+        SquareGridLayout gridLayout = (SquareGridLayout)findViewById(R.id.board_grid);
         gridLayout.removeAllViews();
 
 
@@ -165,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private GridLayout.LayoutParams getFieldParam(int columnSpec, int rowSpec){
         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-        Point fieldSize = getScreenSize();// fieldSize.x = screenWidth, fieldSize.y = screenHeight
 
         param.height = 1;
         param.width = 1;
@@ -174,31 +124,70 @@ public class MainActivity extends AppCompatActivity {
         return param;
     }
 
-    private Point getScreenSize(){
-        Display display = getWindowManager().getDefaultDisplay();
-        Point screenSize = new Point();
-        display.getSize(screenSize);
-        return screenSize;
-    }
 
     public void handleSingleField(View view){
         ImageView img = (ImageView)findViewById(view.getId());
         int x = getFieldCoordinate(Integer.parseInt(view.getTag().toString())).x;
         int y = getFieldCoordinate(Integer.parseInt(view.getTag().toString())).y;
         if(validMove(x, y)){
-            if(whiteMove){
+            if(circleMove){
                 move(x, y, State.O);
 
                 img.setImageResource(R.drawable.circle4);
-//                img.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                ONLY FOR PLAY WITH BOT
+                int randomField1 = ThreadLocalRandom.current().nextInt(0, boardSize);
+                int randomField2 = ThreadLocalRandom.current().nextInt(0, boardSize);
+                for(int i=0; i<boardSize; i++) {
+                    for(int j=0; j<boardSize; j++) {
+                        if(board[i][j] == State.X){
+                            if(i > 0){
+                                if(board[i-1][j] == State.Blank){
+                                    randomField1 = i -1;
+                                    randomField2 = j;
+                                    break;
+                                }
+                            }
+                            if(j > 0){
+                                if(board[i][j-1] == State.Blank){
+                                    randomField1 = i;
+                                    randomField2 = j - 1;
+                                    break;
+                                }
+                            }
+                            if(j > 0 && i > 0){
+                                if(board[i-1][j-1] == State.Blank){
+                                    randomField1 = i -1;
+                                    randomField2 = j - 1;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                while(board[randomField1][randomField2] != State.Blank){
+                    randomField1 = ThreadLocalRandom.current().nextInt(0, boardSize);
+                    randomField2 = ThreadLocalRandom.current().nextInt(0, boardSize);
+                }
+                ImageView img1 = (ImageView)findViewById(randomField1 * boardSize + randomField2);
+                move(randomField1, randomField2, State.X);
+                img1.setImageResource(R.drawable.cross4);
+                idOfBusyFields.add(randomField1 * boardSize + randomField2);
+                circleMove = !circleMove;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             }
             else{
                 move(x, y, State.X);
                 img.setImageResource(R.drawable.cross4);
-//                img.setScaleType(ImageView.ScaleType.FIT_XY);
             }
             idOfBusyFields.add(view.getId());
-            whiteMove = !whiteMove;
+            circleMove = !circleMove;
 
         }
         else{
@@ -293,9 +282,9 @@ public class MainActivity extends AppCompatActivity {
     private void handleWinner(State s){
         GridLayout l = (GridLayout) findViewById(R.id.board_grid);
         LinearLayout ll = (LinearLayout)findViewById(R.id.quit_play_again_layout);
-        LinearLayout lla = (LinearLayout)findViewById(R.id.main_layout);
+        LinearLayout lla = (LinearLayout)findViewById(R.id.main_linear_layout);
 //        TextView tv = (TextView)findViewById(R.id.landscape_mode_result);
-        TextView tv2 = (TextView)findViewById(R.id.portrait_mode_result);
+        TextView tv2 = (TextView)findViewById(R.id.result_text_view);
         TextView lll = (TextView) findViewById(R.id.win_info);
         lll.setVisibility(View.VISIBLE);
         l.setVisibility(View.GONE);
@@ -327,11 +316,11 @@ public class MainActivity extends AppCompatActivity {
         GridLayout l = (GridLayout)findViewById(R.id.board_grid);
         LinearLayout ll = (LinearLayout)findViewById(R.id.quit_play_again_layout);
         TextView lll = (TextView) findViewById(R.id.win_info);
-        LinearLayout lla = (LinearLayout)findViewById(R.id.main_layout);
+        LinearLayout lla = (LinearLayout)findViewById(R.id.main_linear_layout);
         lla.setVisibility(View.VISIBLE);
         lll.setVisibility(View.GONE);
         initBoard();
-        whiteMove = true;
+        circleMove = true;
         l.setVisibility(View.VISIBLE);
         ll.setVisibility(View.GONE);
         clearBoard();
@@ -342,8 +331,11 @@ public class MainActivity extends AppCompatActivity {
         ImageView field;
         for(Integer id : idOfBusyFields ){
             field = (ImageView)findViewById(id);
-            field.setImageResource(R.drawable.empty4);
-//            field.setScaleType(ImageView.ScaleType.FIT_XY);
+            field.setImageResource(R.drawable.empty6);
         }
+    }
+    private void initResultInfo() {
+        AutoResizeTextView artv = (AutoResizeTextView)findViewById(R.id.result_text_view);
+        artv.setText(gamesWonO + " : " + gamesWonX);
     }
 }
