@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000059"
+    tools:context="com.example.ubuntu_master.tic_tac_toe2.MainActivity">
+
+
+    <LinearLayout
+        android:id="@+id/main_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/result_info_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/result_info_circle_sign"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/circle3" />
+
+            <com.example.ubuntu_master.tic_tac_toe2.AutoResizeTextView
+                android:id="@+id/result_text_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="200dp"
+                android:textColor="#FFFFFF"
+                android:textAlignment="center"
+                android:gravity="center"
+                />
+
+
+            <ImageView
+                android:id="@+id/result_info_cross_sign"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cross3"
+                />
+
+        </LinearLayout>
+
+
+
+            <com.example.ubuntu_master.tic_tac_toe2.SquareGridLayout
+                android:id="@+id/board_grid"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000059"
+                />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/quit_play_again_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        >
+        <Button
+            android:id="@+id/playAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/play_again_button"
+            android:backgroundTint="#FFFFFF"
+            android:onClick="handlePlayAgainButton"
+            android:textColor="@color/colorPrimaryDark"
+            >
+        </Button>
+        <Button
+            android:id="@+id/quit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/quit_button"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="@color/colorPrimaryDark"
+            android:onClick="handleQuitButton">
+        </Button>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/win_info"
+        android:layout_above="@id/quit_play_again_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        />
+</RelativeLayout>
